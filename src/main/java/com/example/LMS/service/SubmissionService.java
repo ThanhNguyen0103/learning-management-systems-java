@@ -3,7 +3,7 @@ package com.example.LMS.service;
 import org.springframework.data.domain.Pageable;
 
 import com.example.LMS.domain.Submission;
-import com.example.LMS.domain.res.ResultPaginationDTO;
+import com.example.LMS.domain.dto.ResultPaginationDTO;
 
 public interface SubmissionService {
     Submission create(Submission submission);

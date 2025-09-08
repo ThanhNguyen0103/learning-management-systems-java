@@ -28,6 +28,7 @@ public class User {
     private long id;
     private String email;
     private String password;
+    private String name;
 
     @OneToMany(mappedBy = "user")
     List<Enrollment> enrollment;

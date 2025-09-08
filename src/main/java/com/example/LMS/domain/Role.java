@@ -2,7 +2,12 @@ package com.example.LMS.domain;
 
 import java.util.List;
 
+import com.example.LMS.utils.constant.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +31,9 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum name;
+
     private String description;
     private boolean active;
 
@@ -35,6 +42,7 @@ public class Role {
     private List<Permission> permissions;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<User> users;
 
 }

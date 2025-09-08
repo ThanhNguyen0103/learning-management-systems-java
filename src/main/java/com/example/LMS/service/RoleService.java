@@ -1,8 +1,6 @@
 package com.example.LMS.service;
 
-import org.springframework.data.domain.Pageable;
 import com.example.LMS.domain.Role;
-import com.example.LMS.domain.res.ResultPaginationDTO;
 
 public interface RoleService {
 
@@ -14,5 +12,4 @@ public interface RoleService {
 
     Role getRoleById(long id);
 
-    ResultPaginationDTO getRoleWithPagination(Pageable pageable);
 }

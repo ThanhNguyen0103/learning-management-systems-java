@@ -1,4 +1,4 @@
-package com.example.LMS.domain.res;
+package com.example.LMS.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
