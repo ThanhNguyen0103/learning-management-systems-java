@@ -1,7 +1,5 @@
 package com.example.LMS.domain.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResUserDTO {
+public class CourseSummaryDTO {
     private long id;
-    private String email;
     private String name;
-    private String role;
-    private List<CourseSummaryDTO> courses;
-
+    private double price;
+    private String instructor;
+    private String description;
+    private boolean active;
+    private String category;
 }

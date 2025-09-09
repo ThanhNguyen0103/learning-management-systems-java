@@ -1,5 +1,6 @@
 package com.example.LMS.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.LMS.domain.Role;
+import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.service.RoleService;
 import com.example.LMS.utils.annotation.ApiMessage;
 
@@ -49,5 +51,11 @@ public class RoleController {
     @ApiMessage("Get role success")
     public ResponseEntity<Role> getMethodName(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.roleService.getRoleById(id));
+    }
+
+    @GetMapping("/roles")
+    @ApiMessage("Get roles with pagination success")
+    public ResponseEntity<ResultPaginationDTO> getAllRoleMethod(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.roleService.getRoleWithPagination(pageable));
     }
 }

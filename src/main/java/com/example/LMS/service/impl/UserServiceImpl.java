@@ -1,11 +1,14 @@
 package com.example.LMS.service.impl;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.LMS.domain.Role;
 import com.example.LMS.domain.User;
+import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.ResUserDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.repository.UserRepository;
@@ -102,6 +105,18 @@ public class UserServiceImpl implements UserService {
         res.setId(user.getId());
         res.setName(user.getName());
         res.setRole(user.getRole().getName().name());
+        List<CourseSummaryDTO> courseDTOs = user.getCourse()
+                .stream()
+                .map(c -> {
+                    CourseSummaryDTO dto = new CourseSummaryDTO();
+                    dto.setId(c.getId());
+                    dto.setName(c.getName());
+                    dto.setPrice(c.getPrice());
+                    return dto;
+                })
+                .toList();
+
+        res.setCourses(courseDTOs);
         return res;
     }
 

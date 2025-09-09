@@ -11,7 +11,7 @@ public interface PermissionService {
 
     void delete(long id);
 
-    Permission getRoleById(long id);
+    Permission getPermissionById(long id);
 
     ResultPaginationDTO getPermissionWithPagination(Pageable pageable);
 }

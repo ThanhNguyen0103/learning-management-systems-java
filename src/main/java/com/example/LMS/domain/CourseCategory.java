@@ -23,6 +23,7 @@ public class CourseCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    private boolean active;
 
     private Instant createdAt;
     private Instant updatedAt;

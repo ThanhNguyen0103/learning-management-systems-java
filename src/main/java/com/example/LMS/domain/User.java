@@ -3,6 +3,8 @@ package com.example.LMS.domain;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,6 +42,7 @@ public class User {
     List<Submission> submission;
 
     @OneToMany(mappedBy = "instructor")
+    @JsonIgnore
     List<Course> course;
 
     @ManyToOne
