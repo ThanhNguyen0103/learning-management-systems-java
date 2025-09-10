@@ -2,7 +2,11 @@ package com.example.LMS.domain;
 
 import java.time.Instant;
 
+import com.example.LMS.utils.constant.SubmissionEnum;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +29,9 @@ public class Submission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private Instant submitDate;
-    private boolean status;
+
+    @Enumerated(EnumType.STRING)
+    private SubmissionEnum status;
     private String fileUrl;
 
     @ManyToOne

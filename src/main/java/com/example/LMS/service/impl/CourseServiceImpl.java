@@ -10,7 +10,6 @@ import com.example.LMS.domain.Course;
 import com.example.LMS.domain.CourseCategory;
 import com.example.LMS.domain.User;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
-import com.example.LMS.domain.dto.ResUserDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.repository.CourseCategoryRepository;
 import com.example.LMS.repository.CourseRepository;

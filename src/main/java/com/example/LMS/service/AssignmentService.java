@@ -1,9 +1,7 @@
 package com.example.LMS.service;
 
-import org.springframework.data.domain.Pageable;
-
 import com.example.LMS.domain.Assignment;
-import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.dto.AssignmentDTO;
 
 public interface AssignmentService {
 
@@ -15,5 +13,6 @@ public interface AssignmentService {
 
     Assignment getAssignmentById(long id);
 
-    ResultPaginationDTO getAssignmentWithPagination(Pageable pageable);
+    AssignmentDTO convertAssignmentDTO(Assignment assignment);
+
 }

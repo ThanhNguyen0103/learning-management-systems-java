@@ -1,18 +1,17 @@
 package com.example.LMS.service;
 
-import org.springframework.data.domain.Pageable;
-
 import com.example.LMS.domain.Submission;
-import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.dto.SubmissionDTO;
 
 public interface SubmissionService {
-    Submission create(Submission submission);
+    Submission create(long assignmentId, long userId, String fileUrl);
 
-    Submission update(Submission submission);
+    Submission update(long submissionId, long userId, String fileUrl);
 
-    void delete(long id);
+    void delete(long assignmentId, long submissionId, long userId);
 
     Submission getSubmissionById(long id);
 
-    ResultPaginationDTO getSubmissionWithPagination(Pageable pageable);
+    SubmissionDTO convertSubmissionDTO(Submission submission);
+
 }

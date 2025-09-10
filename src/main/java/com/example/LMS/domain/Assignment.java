@@ -3,7 +3,12 @@ package com.example.LMS.domain;
 import java.time.Instant;
 import java.util.List;
 
+import com.example.LMS.utils.constant.AssignmentEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,10 +35,13 @@ public class Assignment {
     private String description;
     private Instant assignedDate;
     private Instant dueDate;
-    private boolean status;
+
+    @Enumerated(EnumType.STRING)
+    private AssignmentEnum status;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
+    @JsonIgnore
     private User instructor;
 
     @ManyToOne
