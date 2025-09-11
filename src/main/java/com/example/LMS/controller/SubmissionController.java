@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.LMS.domain.Submission;
+import com.example.LMS.domain.User;
 import com.example.LMS.domain.dto.SubmissionDTO;
 import com.example.LMS.service.SubmissionService;
 import com.example.LMS.service.UploadFileService;
+import com.example.LMS.service.UserService;
+import com.example.LMS.utils.SecurityUtils;
 import com.example.LMS.utils.annotation.ApiMessage;
 
 import java.io.IOException;
@@ -26,11 +29,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class SubmissionController {
     private final SubmissionService submissionService;
     private final UploadFileService uploadFileService;
+    private final UserService userService;
 
     public SubmissionController(SubmissionService submissionService,
-            UploadFileService uploadFileService) {
+            UploadFileService uploadFileService,
+            UserService userService) {
         this.submissionService = submissionService;
         this.uploadFileService = uploadFileService;
+        this.userService = userService;
+
     }
 
     @PostMapping("/assignments/{assignmentId}/submissions")
@@ -40,8 +47,13 @@ public class SubmissionController {
             @RequestParam("folder") String folder,
             @RequestParam("file") MultipartFile file) throws IOException, URISyntaxException {
 
+        String email = SecurityUtils.getCurrentUserLogin() != null
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : "";
+        User currentUser = this.userService.getUserByEmail(email);
+
         String filePath = this.uploadFileService.uploadSubmission(folder, file);
-        Submission submission = this.submissionService.create(assignmentId, 7, filePath);
+        Submission submission = this.submissionService.create(assignmentId, currentUser.getId(), filePath);
         SubmissionDTO res = this.submissionService.convertSubmissionDTO(submission);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
@@ -53,8 +65,13 @@ public class SubmissionController {
             @RequestParam("folder") String folder,
             @RequestParam("file") MultipartFile file) throws IOException, URISyntaxException {
 
+        String email = SecurityUtils.getCurrentUserLogin() != null
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : "";
+        User currentUser = this.userService.getUserByEmail(email);
+
         String filePath = this.uploadFileService.uploadSubmission(folder, file);
-        Submission submission = this.submissionService.update(submissionId, 7, filePath);
+        Submission submission = this.submissionService.update(submissionId, currentUser.getId(), filePath);
         SubmissionDTO res = this.submissionService.convertSubmissionDTO(submission);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
@@ -66,7 +83,11 @@ public class SubmissionController {
             @PathVariable("submissionId") long submissionId
 
     ) {
-        this.submissionService.delete(assignmentId, submissionId, 7);
+        String email = SecurityUtils.getCurrentUserLogin() != null
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : "";
+        User currentUser = this.userService.getUserByEmail(email);
+        this.submissionService.delete(assignmentId, submissionId, currentUser.getId());
         return ResponseEntity.ok().body(null);
     }
 

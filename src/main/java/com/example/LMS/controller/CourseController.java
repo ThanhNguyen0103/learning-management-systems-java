@@ -45,21 +45,21 @@ public class CourseController {
 
     @GetMapping("/courses")
     @ApiMessage("get courses success")
-    public ResponseEntity<ResultPaginationDTO> fetchAllPermissions(Pageable pageable) {
+    public ResponseEntity<ResultPaginationDTO> getAllCourse(Pageable pageable) {
         ResultPaginationDTO res = this.courseService.getCourseWithPagination(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @GetMapping("/courses/{id}")
     @ApiMessage("get courses success")
-    public ResponseEntity<CourseSummaryDTO> fetchPermissionByID(@PathVariable("id") long id) {
+    public ResponseEntity<CourseSummaryDTO> getCourseByID(@PathVariable("id") long id) {
         CourseSummaryDTO res = this.courseService.convertCourseSummaryDTO(this.courseService.getCourseById(id));
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @DeleteMapping("/courses/{id}")
     @ApiMessage("delete courses success")
-    public ResponseEntity<Void> deletePermission(@PathVariable("id") long id) {
+    public ResponseEntity<Void> deleteCourseById(@PathVariable("id") long id) {
         this.courseService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

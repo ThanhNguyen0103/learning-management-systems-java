@@ -120,4 +120,18 @@ public class UserServiceImpl implements UserService {
         return res;
     }
 
+    @Override
+    public User handleSaveRefreshToken(String refreshToken, User user) {
+        user.setRefreshToken(refreshToken);
+        return this.userRepository.save(user);
+    }
+
+    @Override
+    public User getUserByEmailAndRefreshToken(String email, String token) {
+        User user = this.userRepository.findByEmailAndRefreshToken(email, token);
+        if (user == null) {
+            throw new AlreadyExistsException("User không tồn tại");
+        }
+        return user;
+    }
 }

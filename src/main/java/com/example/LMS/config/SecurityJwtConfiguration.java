@@ -20,7 +20,7 @@ import com.nimbusds.jose.util.Base64;
 @Configuration
 public class SecurityJwtConfiguration {
     public final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
-    @Value("${thanh.jwt.base64-secret}")
+    @Value("${thanh.jwt.secret}")
     private String secretKeyJwt;
 
     private SecretKey getSecretKey() {

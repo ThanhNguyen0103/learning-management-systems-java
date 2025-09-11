@@ -20,5 +20,9 @@ public interface UserService {
 
     ResUserDTO convertResUser(User user);
 
+    User handleSaveRefreshToken(String refreshToken, User user);
+
+    User getUserByEmailAndRefreshToken(String email, String token);
+
     ResultPaginationDTO getUserWithPagination(Pageable pageable);
 }

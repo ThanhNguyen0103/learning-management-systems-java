@@ -31,8 +31,10 @@ public class User {
     private String email;
     private String password;
     private String name;
+    private String refreshToken;
 
     @OneToMany(mappedBy = "user")
+
     List<Enrollment> enrollment;
 
     @OneToMany(mappedBy = "instructor")
