@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.LMS.domain.User;
 import com.example.LMS.domain.dto.ResUserDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.res.ResUserLoginDTO.UserDTO;
 import com.example.LMS.service.UserService;
 import com.example.LMS.utils.annotation.ApiMessage;
 
@@ -32,7 +33,7 @@ public class UserController {
 
     @PostMapping("/users")
     @ApiMessage("Create User success")
-    public ResponseEntity<ResUserDTO> postCreateUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> postCreateUser(@RequestBody User user) {
         String pw = passwordEncoder.encode(user.getPassword());
         user.setPassword(pw);
         User res = this.userService.create(user);
@@ -42,7 +43,7 @@ public class UserController {
 
     @PutMapping("/users")
     @ApiMessage("Update user success")
-    public ResponseEntity<ResUserDTO> putMethodName(@RequestBody User user) {
+    public ResponseEntity<UserDTO> putMethodName(@RequestBody User user) {
         User res = this.userService.update(user);
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.convertResUser(res));
     }
@@ -56,7 +57,7 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     @ApiMessage("Get user success")
-    public ResponseEntity<ResUserDTO> getMethodName(@PathVariable("id") long id) {
+    public ResponseEntity<UserDTO> getMethodName(@PathVariable("id") long id) {
         User res = this.userService.getUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.convertResUser(res));
     }

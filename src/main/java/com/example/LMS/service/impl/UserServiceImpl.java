@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import com.example.LMS.domain.Role;
 import com.example.LMS.domain.User;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
-import com.example.LMS.domain.dto.ResUserDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.res.ResUserLoginDTO;
+import com.example.LMS.domain.res.ResUserLoginDTO.UserDTO;
 import com.example.LMS.repository.UserRepository;
 import com.example.LMS.service.UserService;
 import com.example.LMS.utils.constant.RoleEnum;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
         res.setPassword(user.getPassword());
         res.setName(user.getName());
         if (user.getRole() != null) {
-            Role role = this.roleService.getRoleById(user.getRole().getId());
+            Role role = this.roleService.getRoleByName(user.getRole().getName());
             res.setRole(role);
         } else {
             Role role = this.roleService.getRoleByName(RoleEnum.USER);
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
         res.setPassword(user.getPassword());
         res.setName(user.getName());
         if (user.getRole() != null) {
-            Role role = this.roleService.getRoleById(user.getRole().getId());
+            Role role = this.roleService.getRoleByName(user.getRole().getName());
             res.setRole(role);
         } else {
             Role role = this.roleService.getRoleByName(RoleEnum.USER);
@@ -99,24 +100,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResUserDTO convertResUser(User user) {
-        ResUserDTO res = new ResUserDTO();
+    public UserDTO convertResUser(User user) {
+
+        ResUserLoginDTO.UserDTO res = new ResUserLoginDTO.UserDTO();
+
+        List<ResUserLoginDTO.PermissionDTO> permissions = user.getRole().getPermissions().stream()
+                .map(p -> new ResUserLoginDTO.PermissionDTO(
+                        p.getApiPath(),
+                        p.getMethod(),
+                        p.getModule()))
+                .toList();
+
+        ResUserLoginDTO.RoleUserDTO roleDTO = new ResUserLoginDTO.RoleUserDTO(user.getRole().getName().name(),
+                permissions);
         res.setEmail(user.getEmail());
         res.setId(user.getId());
         res.setName(user.getName());
-        res.setRole(user.getRole().getName().name());
-        List<CourseSummaryDTO> courseDTOs = user.getCourse()
-                .stream()
-                .map(c -> {
-                    CourseSummaryDTO dto = new CourseSummaryDTO();
-                    dto.setId(c.getId());
-                    dto.setName(c.getName());
-                    dto.setPrice(c.getPrice());
-                    return dto;
-                })
-                .toList();
+        res.setRole(roleDTO);
+        if (user.getCourse() != null) {
+            List<CourseSummaryDTO> courseDTOs = user.getCourse()
+                    .stream()
+                    .map(c -> {
+                        CourseSummaryDTO dto = new CourseSummaryDTO();
+                        dto.setId(c.getId());
+                        dto.setName(c.getName());
+                        dto.setPrice(c.getPrice());
+                        return dto;
+                    })
+                    .toList();
 
-        res.setCourses(courseDTOs);
+            res.setCourses(courseDTOs);
+        }
+
         return res;
     }
 

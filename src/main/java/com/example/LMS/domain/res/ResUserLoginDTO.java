@@ -1,6 +1,9 @@
 package com.example.LMS.domain.res;
 
+import java.time.Instant;
 import java.util.List;
+
+import com.example.LMS.domain.dto.CourseSummaryDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +27,8 @@ public class ResUserLoginDTO {
         private String email;
         private String name;
         private RoleUserDTO role;
+        private List<CourseSummaryDTO> courses;
+
     }
 
     @Setter

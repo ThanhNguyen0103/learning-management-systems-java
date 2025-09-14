@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import com.example.LMS.domain.User;
 import com.example.LMS.domain.dto.ResUserDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.res.ResUserLoginDTO.UserDTO;
 
 public interface UserService {
 
@@ -18,7 +19,7 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    ResUserDTO convertResUser(User user);
+    UserDTO convertResUser(User user);
 
     User handleSaveRefreshToken(String refreshToken, User user);
 
