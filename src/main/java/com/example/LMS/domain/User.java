@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import com.example.LMS.utils.SecurityUtils;
+import com.example.LMS.utils.constant.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -35,18 +36,22 @@ public class User {
     private String email;
     private String password;
     private String name;
+    private int age;
+    private String address;
+    private GenderEnum gender;
+    private boolean active;
     private String refreshToken;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     List<Enrollment> enrollment;
 
-    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "instructor")
     List<Assignment> assignment;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student")
     List<Submission> submission;
 
-    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "instructor")
     @JsonIgnore
     List<Course> course;
 

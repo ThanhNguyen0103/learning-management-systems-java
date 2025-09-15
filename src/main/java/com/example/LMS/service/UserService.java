@@ -3,7 +3,6 @@ package com.example.LMS.service;
 import org.springframework.data.domain.Pageable;
 
 import com.example.LMS.domain.User;
-import com.example.LMS.domain.dto.ResUserDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.domain.res.ResUserLoginDTO.UserDTO;
 

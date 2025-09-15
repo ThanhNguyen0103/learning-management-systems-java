@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
         res.setEmail(user.getEmail());
         res.setPassword(user.getPassword());
         res.setName(user.getName());
+        res.setActive(user.isActive());
         if (user.getRole() != null) {
             Role role = this.roleService.getRoleByName(user.getRole().getName());
             res.setRole(role);
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService {
 
         res.setPassword(user.getPassword());
         res.setName(user.getName());
+        res.setActive(user.isActive());
         if (user.getRole() != null) {
             Role role = this.roleService.getRoleByName(user.getRole().getName());
             res.setRole(role);
@@ -74,7 +76,9 @@ public class UserServiceImpl implements UserService {
     public void delete(long id) {
         User res = this.userRepository.findById(id)
                 .orElseThrow(() -> new AlreadyExistsException("User không tồn tại"));
-        this.userRepository.delete(res);
+        res.setActive(false);
+        this.userRepository.save(res);
+        // this.userRepository.delete(res);
     }
 
     @Override
@@ -116,6 +120,7 @@ public class UserServiceImpl implements UserService {
         res.setEmail(user.getEmail());
         res.setId(user.getId());
         res.setName(user.getName());
+        res.setActive(user.isActive());
         res.setRole(roleDTO);
         if (user.getCourse() != null) {
             List<CourseSummaryDTO> courseDTOs = user.getCourse()

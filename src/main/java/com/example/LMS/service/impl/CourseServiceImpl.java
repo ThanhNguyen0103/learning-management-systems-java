@@ -11,6 +11,7 @@ import com.example.LMS.domain.CourseCategory;
 import com.example.LMS.domain.User;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.res.ResUserLoginDTO;
 import com.example.LMS.repository.CourseCategoryRepository;
 import com.example.LMS.repository.CourseRepository;
 import com.example.LMS.service.CourseService;
@@ -107,11 +108,17 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseSummaryDTO convertCourseSummaryDTO(Course course) {
         CourseSummaryDTO res = new CourseSummaryDTO();
+        ResUserLoginDTO.UserDTO user = new ResUserLoginDTO.UserDTO();
+
         res.setId(course.getId());
         res.setName(course.getName());
         res.setPrice(course.getPrice());
-        res.setInstructor(course.getInstructor().getName());
-        res.setCategory(course.getCategory().getName());
+
+        user.setId(course.getInstructor().getId());
+        user.setName(course.getInstructor().getName());
+        res.setInstructor(user);
+        res.setCategory(new CourseSummaryDTO.CategoryDTO(course.getCategory().getId(),
+                course.getCategory().getName()));
         res.setActive(course.isActive());
         res.setDescription(course.getDescription());
         return res;

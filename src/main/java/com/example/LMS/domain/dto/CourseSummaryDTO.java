@@ -1,5 +1,7 @@
 package com.example.LMS.domain.dto;
 
+import com.example.LMS.domain.res.ResUserLoginDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +15,18 @@ public class CourseSummaryDTO {
     private long id;
     private String name;
     private double price;
-    private String instructor;
+    private ResUserLoginDTO.UserDTO instructor;
     private String description;
     private boolean active;
-    private String category;
+    private CategoryDTO category;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryDTO {
+        private long id;
+        private String name;
+
+    }
 }

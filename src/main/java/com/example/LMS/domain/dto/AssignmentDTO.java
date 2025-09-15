@@ -20,6 +20,6 @@ public class AssignmentDTO {
     private Instant assignedDate;
     private Instant dueDate;
     private AssignmentEnum status;
-    private String instructor;
-    private String course;
+    private CourseSummaryDTO course;
+
 }

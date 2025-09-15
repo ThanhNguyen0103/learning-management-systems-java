@@ -44,7 +44,6 @@ public class Course {
     private CourseCategory category;
 
     @OneToMany(mappedBy = "course")
-
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course")

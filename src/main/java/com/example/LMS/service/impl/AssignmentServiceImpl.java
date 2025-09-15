@@ -1,28 +1,32 @@
 package com.example.LMS.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.LMS.domain.Assignment;
 import com.example.LMS.domain.Course;
-import com.example.LMS.domain.User;
+
 import com.example.LMS.domain.dto.AssignmentDTO;
+import com.example.LMS.domain.dto.CourseSummaryDTO;
+import com.example.LMS.domain.dto.CourseSummaryDTO.CategoryDTO;
+import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.res.ResUserLoginDTO;
 import com.example.LMS.repository.AssignmentRepository;
 import com.example.LMS.repository.CourseRepository;
 import com.example.LMS.service.AssignmentService;
-import com.example.LMS.service.UserService;
+
 import com.example.LMS.utils.error.AlreadyExistsException;
 
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
 
     private final AssignmentRepository assignmentRepository;
-    private final UserService userService;
     private final CourseRepository courseRepository;
 
     public AssignmentServiceImpl(AssignmentRepository assignmentRepository,
-            UserService userService, CourseRepository courseRepository) {
+            CourseRepository courseRepository) {
         this.assignmentRepository = assignmentRepository;
-        this.userService = userService;
         this.courseRepository = courseRepository;
     }
 
@@ -36,7 +40,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         res.setStatus(assignment.getStatus());
 
         Course course = this.courseRepository.findById(assignment.getCourse().getId())
-                .orElseThrow(() -> new AlreadyExistsException("assignment không tồn tại"));
+                .orElseThrow(() -> new AlreadyExistsException("course không tồn tại"));
         res.setCourse(course);
         res.setInstructor(course.getInstructor());
 
@@ -53,10 +57,13 @@ public class AssignmentServiceImpl implements AssignmentService {
         res.setDueDate(assignment.getDueDate());
         res.setStatus(assignment.getStatus());
 
-        Course course = this.courseRepository.findById(assignment.getCourse().getId())
-                .orElseThrow(() -> new AlreadyExistsException("assignment không tồn tại"));
-        res.setCourse(course);
-        res.setInstructor(course.getInstructor());
+        // update course và instructor
+
+        // Course course =
+        // this.courseRepository.findById(assignment.getCourse().getId())
+        // .orElseThrow(() -> new AlreadyExistsException("assignment không tồn tại"));
+        // res.setCourse(course);
+        // res.setInstructor(course.getInstructor());
         return this.assignmentRepository.save(res);
     }
 
@@ -77,14 +84,35 @@ public class AssignmentServiceImpl implements AssignmentService {
     public AssignmentDTO convertAssignmentDTO(Assignment assignment) {
         AssignmentDTO res = new AssignmentDTO();
         res.setAssignedDate(assignment.getAssignedDate());
-        res.setCourse(assignment.getCourse().getName());
+        res.setName(assignment.getName());
+        res.setStatus(assignment.getStatus());
         res.setDescription(assignment.getDescription());
         res.setDueDate(assignment.getDueDate());
         res.setId(assignment.getId());
-        res.setInstructor(assignment.getInstructor().getName());
-        res.setName(assignment.getName());
-        res.setStatus(assignment.getStatus());
+        ResUserLoginDTO.UserDTO user = new ResUserLoginDTO.UserDTO();
+        user.setName(assignment.getCourse().getInstructor().getName());
+        res.setCourse(
+                new CourseSummaryDTO(assignment.getCourse().getId(), assignment.getCourse().getName(),
+                        assignment.getCourse().getPrice(), user,
+                        assignment.getCourse().getDescription(), assignment.getCourse().isActive(), null));
         return res;
+    }
+
+    @Override
+    public ResultPaginationDTO getAssignmentWithPagination(Pageable pageable) {
+        Page<Assignment> pages = this.assignmentRepository.findAll(pageable);
+        ResultPaginationDTO result = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
+
+        meta.setCurrentPage(pages.getNumber() + 1);
+        meta.setPageSize(pages.getSize());
+        meta.setPages(pages.getTotalPages());
+        meta.setTotal(pages.getTotalElements());
+
+        result.setResult(pages.getContent().stream()
+                .map(item -> this.convertAssignmentDTO(item)).toList());
+        result.setMeta(meta);
+        return result;
     }
 
 }

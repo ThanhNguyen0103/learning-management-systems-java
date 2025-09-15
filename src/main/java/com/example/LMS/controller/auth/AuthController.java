@@ -84,7 +84,7 @@ public class AuthController {
 
                 ResUserLoginDTO.UserDTO userLogin = new ResUserLoginDTO.UserDTO(currentUser.getId(),
                                 currentUser.getEmail(),
-                                currentUser.getName(), role, courseDTOs);
+                                currentUser.getName(), role, currentUser.isActive(), courseDTOs);
 
                 String accessToken = this.securityUtils.generateJwt(currentUser,
                                 TokenType.ACCESS);
@@ -138,7 +138,7 @@ public class AuthController {
 
                 ResUserLoginDTO.UserDTO userLogin = new ResUserLoginDTO.UserDTO(currentUser.getId(),
                                 currentUser.getEmail(),
-                                currentUser.getName(), role, courseDTOs);
+                                currentUser.getName(), role, currentUser.isActive(), courseDTOs);
 
                 String accessToken = this.securityUtils.generateJwt(currentUser,
                                 TokenType.ACCESS);
@@ -188,10 +188,9 @@ public class AuthController {
                 ResUserLoginDTO.RoleUserDTO role = new ResUserLoginDTO.RoleUserDTO(
                                 currentUser.getRole().getName().name(),
                                 permissions);
-
                 ResUserLoginDTO.UserDTO userLogin = new ResUserLoginDTO.UserDTO(currentUser.getId(),
                                 currentUser.getEmail(),
-                                currentUser.getName(), role, courseDTOs);
+                                currentUser.getName(), role, currentUser.isActive(), courseDTOs);
 
                 return ResponseEntity
                                 .status(HttpStatus.OK)

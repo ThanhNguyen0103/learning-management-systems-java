@@ -1,5 +1,6 @@
 package com.example.LMS.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.LMS.domain.Assignment;
 import com.example.LMS.domain.dto.AssignmentDTO;
+import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.service.AssignmentService;
 import com.example.LMS.utils.annotation.ApiMessage;
 
@@ -55,4 +57,10 @@ public class AssignmentController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    @GetMapping("/assignments")
+    @ApiMessage("get assignmentssuccess")
+    public ResponseEntity<ResultPaginationDTO> getAllAssignment(Pageable pageable) {
+        ResultPaginationDTO res = this.assignmentService.getAssignmentWithPagination(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
 }
