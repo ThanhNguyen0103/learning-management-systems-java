@@ -97,4 +97,9 @@ public class SubmissionServiceImpl implements SubmissionService {
         return res;
     }
 
+    @Override
+    public Submission getSubmissionByAssigmentId(long assignmentId) {
+        return this.submissionRepository.findByAssignmentId(assignmentId);
+    }
+
 }

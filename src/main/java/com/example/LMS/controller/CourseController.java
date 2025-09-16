@@ -1,5 +1,8 @@
 package com.example.LMS.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,21 +13,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.LMS.domain.Course;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.service.CourseService;
+import com.example.LMS.service.UploadFileService;
 import com.example.LMS.utils.annotation.ApiMessage;
 
 @RestController
 @RequestMapping("/api/v1")
 public class CourseController {
     private final CourseService courseService;
+    private final UploadFileService uploadFileService;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, UploadFileService uploadFileService) {
         this.courseService = courseService;
+        this.uploadFileService = uploadFileService;
     }
 
     @PostMapping("/courses")
@@ -63,4 +71,12 @@ public class CourseController {
         this.courseService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    @PostMapping("/upload")
+    public String upload(@RequestParam("file") MultipartFile file,
+            @RequestParam("folder") String folder) throws URISyntaxException, IOException {
+        String fileName = this.uploadFileService.uploadSubmission(folder, file);
+        return fileName;
+    }
+
 }

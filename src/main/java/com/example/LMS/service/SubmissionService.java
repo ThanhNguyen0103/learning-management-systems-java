@@ -10,6 +10,8 @@ public interface SubmissionService {
 
     void delete(long assignmentId, long submissionId, long userId);
 
+    Submission getSubmissionByAssigmentId(long assignmentId);
+
     Submission getSubmissionById(long id);
 
     SubmissionDTO convertSubmissionDTO(Submission submission);

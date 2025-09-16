@@ -42,6 +42,7 @@ public class CourseServiceImpl implements CourseService {
         res.setName(course.getName());
         res.setPrice(course.getPrice());
         res.setDescription(course.getDescription());
+        res.setThumnail(course.getThumnail());
 
         User user = this.userService.getUserById(course.getInstructor().getId());
         res.setInstructor(user);
@@ -61,6 +62,9 @@ public class CourseServiceImpl implements CourseService {
 
         if (!res.getName().equals(course.getName()) && existsName) {
             throw new AlreadyExistsException("course name đã tồn tại");
+        }
+        if (course.getThumnail() != null) {
+            res.setThumnail(course.getThumnail());
         }
 
         res.setActive(course.isActive());
@@ -113,7 +117,7 @@ public class CourseServiceImpl implements CourseService {
         res.setId(course.getId());
         res.setName(course.getName());
         res.setPrice(course.getPrice());
-
+        res.setThumnail(course.getThumnail());
         user.setId(course.getInstructor().getId());
         user.setName(course.getInstructor().getName());
         res.setInstructor(user);
@@ -121,6 +125,11 @@ public class CourseServiceImpl implements CourseService {
                 course.getCategory().getName()));
         res.setActive(course.isActive());
         res.setDescription(course.getDescription());
+        res.setEnrollments(course.getEnrollments().stream()
+                .map((item) -> new CourseSummaryDTO.EnrollmentDTO(item.getEnrollDate(), item.getUser().getName(),
+                        item.isStatus()))
+                .toList());
+
         return res;
 
     }

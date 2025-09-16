@@ -9,8 +9,8 @@ import com.example.LMS.domain.Course;
 
 import com.example.LMS.domain.dto.AssignmentDTO;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
-import com.example.LMS.domain.dto.CourseSummaryDTO.CategoryDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
+import com.example.LMS.domain.dto.SubmissionDTO;
 import com.example.LMS.domain.res.ResUserLoginDTO;
 import com.example.LMS.repository.AssignmentRepository;
 import com.example.LMS.repository.CourseRepository;
@@ -94,7 +94,14 @@ public class AssignmentServiceImpl implements AssignmentService {
         res.setCourse(
                 new CourseSummaryDTO(assignment.getCourse().getId(), assignment.getCourse().getName(),
                         assignment.getCourse().getPrice(), user,
-                        assignment.getCourse().getDescription(), assignment.getCourse().isActive(), null));
+                        assignment.getCourse().getDescription(),
+                        assignment.getCourse().isActive(), null,
+                        assignment.getCourse().getThumnail(), null));
+
+        res.setSubmissions(assignment.getSubmissions().stream().map(
+                item -> new SubmissionDTO(item.getId(), item.getSubmitDate(), item.getStatus(),
+                        item.getStudent().getName(), item.getFileUrl()))
+                .toList());
         return res;
     }
 

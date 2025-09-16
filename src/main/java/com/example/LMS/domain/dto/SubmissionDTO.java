@@ -18,5 +18,6 @@ public class SubmissionDTO {
     private Instant submitDate;
     private SubmissionEnum status;
     private String user;
+    private String url;
 
 }

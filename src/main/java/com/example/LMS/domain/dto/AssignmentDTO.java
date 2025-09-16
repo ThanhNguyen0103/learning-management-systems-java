@@ -1,6 +1,7 @@
 package com.example.LMS.domain.dto;
 
 import java.time.Instant;
+import java.util.List;
 
 import com.example.LMS.utils.constant.AssignmentEnum;
 
@@ -21,5 +22,6 @@ public class AssignmentDTO {
     private Instant dueDate;
     private AssignmentEnum status;
     private CourseSummaryDTO course;
+    private List<SubmissionDTO> submissions;
 
 }

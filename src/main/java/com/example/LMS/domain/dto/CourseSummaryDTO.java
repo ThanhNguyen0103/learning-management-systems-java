@@ -1,5 +1,9 @@
 package com.example.LMS.domain.dto;
 
+import java.time.Instant;
+import java.util.List;
+
+import com.example.LMS.domain.Enrollment;
 import com.example.LMS.domain.res.ResUserLoginDTO;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +23,8 @@ public class CourseSummaryDTO {
     private String description;
     private boolean active;
     private CategoryDTO category;
+    private String thumnail;
+    private List<EnrollmentDTO> enrollments;
 
     @Getter
     @Setter
@@ -27,6 +33,17 @@ public class CourseSummaryDTO {
     public static class CategoryDTO {
         private long id;
         private String name;
+
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EnrollmentDTO {
+        private Instant enrollDate;
+        private String name;
+        private boolean status;
 
     }
 }

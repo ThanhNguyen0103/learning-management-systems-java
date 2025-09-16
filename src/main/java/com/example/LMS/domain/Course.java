@@ -34,6 +34,7 @@ public class Course {
     private String description;
     private double price;
     private boolean active;
+    private String thumnail;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
