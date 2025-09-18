@@ -29,7 +29,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getUserByEmail(String email) {
-        return this.userRepository.findByEmail(email);
+        User user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            throw new AlreadyExistsException("user không tồn tại");
+        }
+        return user;
     }
 
     @Override
@@ -41,6 +45,9 @@ public class UserServiceImpl implements UserService {
         res.setEmail(user.getEmail());
         res.setPassword(user.getPassword());
         res.setName(user.getName());
+        res.setAddress(user.getAddress());
+        res.setAge(user.getAge());
+        res.setGender(user.getGender());
         res.setActive(user.isActive());
         if (user.getRole() != null) {
             Role role = this.roleService.getRoleByName(user.getRole().getName());
@@ -61,6 +68,9 @@ public class UserServiceImpl implements UserService {
 
         res.setPassword(user.getPassword());
         res.setName(user.getName());
+        res.setAddress(user.getAddress());
+        res.setAge(user.getAge());
+        res.setGender(user.getGender());
         res.setActive(user.isActive());
         if (user.getRole() != null) {
             Role role = this.roleService.getRoleByName(user.getRole().getName());

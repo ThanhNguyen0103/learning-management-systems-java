@@ -24,11 +24,12 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+        String[] whiteList = { "/", "/api/v1/auth/login", "/api/v1/auth/refresh" };
         http
                 .csrf(c -> c.disable())
                 .authorizeHttpRequests(
-                        authorize -> authorize.anyRequest().permitAll()
+                        authorize -> authorize.requestMatchers(whiteList).permitAll()
+                                .anyRequest().authenticated()
 
                 )
 
