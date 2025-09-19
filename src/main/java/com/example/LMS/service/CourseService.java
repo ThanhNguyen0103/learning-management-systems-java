@@ -18,4 +18,5 @@ public interface CourseService {
     CourseSummaryDTO convertCourseSummaryDTO(Course course);
 
     ResultPaginationDTO getCourseWithPagination(Pageable pageable);
+
 }

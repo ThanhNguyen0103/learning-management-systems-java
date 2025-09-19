@@ -3,6 +3,7 @@ package com.example.LMS.domain;
 import java.time.Instant;
 import java.util.List;
 
+import com.example.LMS.utils.SecurityUtils;
 import com.example.LMS.utils.constant.AssignmentEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,6 +16,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,4 +58,20 @@ public class Assignment {
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = Instant.now();
+        this.createdBy = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : null;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = Instant.now();
+        this.updatedBy = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : null;
+    }
 }

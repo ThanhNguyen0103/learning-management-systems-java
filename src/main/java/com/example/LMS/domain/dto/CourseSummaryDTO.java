@@ -22,9 +22,13 @@ public class CourseSummaryDTO {
     private ResUserLoginDTO.UserDTO instructor;
     private String description;
     private boolean active;
-    private CategoryDTO category;
+    private List<CategoryDTO> categories;
     private String thumnail;
     private List<EnrollmentDTO> enrollments;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private String createdBy;
+    private String updatedBy;
 
     @Getter
     @Setter

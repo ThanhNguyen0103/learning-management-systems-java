@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.example.LMS.domain.Role;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         User user = this.userRepository.findByEmail(email);
         if (user == null) {
-            throw new AlreadyExistsException("user không tồn tại");
+            throw new BadCredentialsException("Bads credencials");
         }
         return user;
     }
@@ -132,6 +133,9 @@ public class UserServiceImpl implements UserService {
         res.setName(user.getName());
         res.setActive(user.isActive());
         res.setRole(roleDTO);
+        res.setAge(user.getAge());
+        res.setAddress(user.getAddress());
+        res.setGender(user.getGender());
         if (user.getCourse() != null) {
             List<CourseSummaryDTO> courseDTOs = user.getCourse()
                     .stream()
@@ -146,6 +150,10 @@ public class UserServiceImpl implements UserService {
 
             res.setCourses(courseDTOs);
         }
+        res.setCreatedAt(user.getCreatedAt());
+        res.setCreatedBy(user.getCreatedBy());
+        res.setUpdatedAt(user.getUpdatedAt());
+        res.setUpdatedBy(user.getUpdatedBy());
 
         return res;
     }

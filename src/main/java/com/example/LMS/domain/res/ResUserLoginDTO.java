@@ -1,8 +1,10 @@
 package com.example.LMS.domain.res;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.example.LMS.domain.dto.CourseSummaryDTO;
+import com.example.LMS.utils.constant.GenderEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,9 +27,16 @@ public class ResUserLoginDTO {
         private long id;
         private String email;
         private String name;
+        private int age;
+        private String address;
+        private GenderEnum gender;
         private RoleUserDTO role;
         private boolean active;
         private List<CourseSummaryDTO> courses;
+        private Instant createdAt;
+        private Instant updatedAt;
+        private String createdBy;
+        private String updatedBy;
 
     }
 

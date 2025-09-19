@@ -2,10 +2,14 @@ package com.example.LMS.domain;
 
 import java.time.Instant;
 
+import com.example.LMS.utils.SecurityUtils;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +33,20 @@ public class CourseCategory {
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = Instant.now();
+        this.createdBy = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : null;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = Instant.now();
+        this.updatedBy = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : null;
+    }
 }

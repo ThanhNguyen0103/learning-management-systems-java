@@ -1,7 +1,9 @@
 package com.example.LMS.domain;
 
+import java.time.Instant;
 import java.util.List;
 
+import com.example.LMS.utils.SecurityUtils;
 import com.example.LMS.utils.constant.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,6 +17,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,5 +48,24 @@ public class Role {
     @OneToMany(mappedBy = "role")
     @JsonIgnore
     private List<User> users;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private String createdBy;
+    private String updatedBy;
 
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = Instant.now();
+        this.createdBy = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : null;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = Instant.now();
+        this.updatedBy = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : null;
+    }
 }

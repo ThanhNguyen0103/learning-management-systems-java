@@ -46,10 +46,12 @@ public class CourseServiceImpl implements CourseService {
 
         User user = this.userService.getUserById(course.getInstructor().getId());
         res.setInstructor(user);
+        if (course.getCategories() != null) {
+            List<CourseCategory> courseCategories = this.courseCategoryRepository
+                    .findAllById(course.getCategories().stream().map(item -> item.getId()).toList());
+            res.setCategories(courseCategories);
+        }
 
-        CourseCategory courseCategory = this.courseCategoryRepository.findById(course.getCategory().getId())
-                .orElseThrow(() -> new AlreadyExistsException("course category không tồn tại"));
-        res.setCategory(courseCategory);
         return this.courseRepository.save(res);
     }
 
@@ -71,10 +73,12 @@ public class CourseServiceImpl implements CourseService {
         res.setName(course.getName());
         res.setPrice(course.getPrice());
         res.setDescription(course.getDescription());
+        if (course.getCategories() != null) {
+            List<CourseCategory> courseCategories = this.courseCategoryRepository
+                    .findAllById(course.getCategories().stream().map(item -> item.getId()).toList());
+            res.setCategories(courseCategories);
+        }
 
-        CourseCategory courseCategory = this.courseCategoryRepository.findById(course.getCategory().getId())
-                .orElseThrow(() -> new AlreadyExistsException("course category không tồn tại"));
-        res.setCategory(courseCategory);
         return this.courseRepository.save(res);
     }
 
@@ -121,15 +125,20 @@ public class CourseServiceImpl implements CourseService {
         user.setId(course.getInstructor().getId());
         user.setName(course.getInstructor().getName());
         res.setInstructor(user);
-        res.setCategory(new CourseSummaryDTO.CategoryDTO(course.getCategory().getId(),
-                course.getCategory().getName()));
+        res.setCreatedAt(course.getCreatedAt());
+        res.setCreatedBy(course.getCreatedBy());
+        res.setUpdatedAt(course.getUpdatedAt());
+        res.setUpdatedBy(course.getUpdatedBy());
+        res.setCategories(course.getCategories().stream()
+                .map(item -> new CourseSummaryDTO.CategoryDTO(item.getId(), item.getName())).toList());
         res.setActive(course.isActive());
         res.setDescription(course.getDescription());
-        res.setEnrollments(course.getEnrollments().stream()
-                .map((item) -> new CourseSummaryDTO.EnrollmentDTO(item.getEnrollDate(), item.getUser().getName(),
-                        item.isStatus()))
-                .toList());
-
+        if (course.getEnrollments() != null) {
+            res.setEnrollments(course.getEnrollments().stream()
+                    .map((item) -> new CourseSummaryDTO.EnrollmentDTO(item.getEnrollDate(), item.getUser().getName(),
+                            item.isStatus()))
+                    .toList());
+        }
         return res;
 
     }

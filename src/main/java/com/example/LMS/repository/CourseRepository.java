@@ -8,4 +8,5 @@ import com.example.LMS.domain.Course;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     boolean existsByName(String name);
+
 }

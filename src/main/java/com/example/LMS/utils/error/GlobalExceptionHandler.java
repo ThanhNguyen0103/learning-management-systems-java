@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
         ApiResponse<Object> res = new ApiResponse<>();
-        res.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
         res.setError("Đăng nhập không thành công");
         res.setMessage(ex.getMessage());
         return ResponseEntity.status(res.getStatusCode()).body(res);
