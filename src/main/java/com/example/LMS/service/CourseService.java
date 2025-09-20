@@ -19,4 +19,6 @@ public interface CourseService {
 
     ResultPaginationDTO getCourseWithPagination(Pageable pageable);
 
+    ResultPaginationDTO getCourseByUserWithPagination(long userId, Pageable pageable);
+
 }

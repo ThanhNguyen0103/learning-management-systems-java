@@ -143,4 +143,25 @@ public class CourseServiceImpl implements CourseService {
 
     }
 
+    @Override
+    public ResultPaginationDTO getCourseByUserWithPagination(long userId, Pageable pageable) {
+
+        Page<Course> pages = this.courseRepository.findByInstructorId(userId, pageable);
+
+        ResultPaginationDTO result = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
+
+        meta.setCurrentPage(pages.getNumber() + 1);
+        meta.setPageSize(pages.getSize());
+        meta.setPages(pages.getTotalPages());
+        meta.setTotal(pages.getTotalElements());
+
+        result.setResult(pages.getContent().stream()
+                .map(item -> this.convertCourseSummaryDTO(item)).toList());
+
+        result.setMeta(meta);
+        return result;
+
+    }
+
 }

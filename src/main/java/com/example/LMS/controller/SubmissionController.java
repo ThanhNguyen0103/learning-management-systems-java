@@ -53,7 +53,7 @@ public class SubmissionController {
                 User currentUser = this.userService.getUserByEmail(email);
 
                 String filePath = this.uploadFileService.uploadSubmission(folder, file);
-                Submission submission = this.submissionService.create(assignmentId, 20, filePath);
+                Submission submission = this.submissionService.create(assignmentId, currentUser.getId(), filePath);
                 SubmissionDTO res = this.submissionService.convertSubmissionDTO(submission);
                 return ResponseEntity.status(HttpStatus.CREATED).body(res);
         }

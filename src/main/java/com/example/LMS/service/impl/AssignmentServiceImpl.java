@@ -99,17 +99,36 @@ public class AssignmentServiceImpl implements AssignmentService {
                                                 assignment.getCourse().getThumnail(), null, assignment.getCreatedAt(),
                                                 assignment.getUpdatedAt(), assignment.getCreatedBy(),
                                                 assignment.getUpdatedBy()));
+                if (assignment.getSubmissions() != null) {
+                        res.setSubmissions(assignment.getSubmissions().stream().map(
+                                        item -> new SubmissionDTO(item.getId(), item.getSubmitDate(), item.getStatus(),
+                                                        item.getStudent().getName(), item.getFileUrl()))
+                                        .toList());
+                }
 
-                res.setSubmissions(assignment.getSubmissions().stream().map(
-                                item -> new SubmissionDTO(item.getId(), item.getSubmitDate(), item.getStatus(),
-                                                item.getStudent().getName(), item.getFileUrl()))
-                                .toList());
                 return res;
         }
 
         @Override
         public ResultPaginationDTO getAssignmentWithPagination(Pageable pageable) {
                 Page<Assignment> pages = this.assignmentRepository.findAll(pageable);
+                ResultPaginationDTO result = new ResultPaginationDTO();
+                ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
+
+                meta.setCurrentPage(pages.getNumber() + 1);
+                meta.setPageSize(pages.getSize());
+                meta.setPages(pages.getTotalPages());
+                meta.setTotal(pages.getTotalElements());
+
+                result.setResult(pages.getContent().stream()
+                                .map(item -> this.convertAssignmentDTO(item)).toList());
+                result.setMeta(meta);
+                return result;
+        }
+
+        @Override
+        public ResultPaginationDTO getAssignmentByUserWithPagination(long userId, Pageable pageable) {
+                Page<Assignment> pages = this.assignmentRepository.findByInstructorId(userId, pageable);
                 ResultPaginationDTO result = new ResultPaginationDTO();
                 ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 

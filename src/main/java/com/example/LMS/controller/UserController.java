@@ -16,18 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.LMS.domain.User;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.domain.res.ResUserLoginDTO.UserDTO;
+import com.example.LMS.service.AssignmentService;
+import com.example.LMS.service.CourseService;
 import com.example.LMS.service.UserService;
+import com.example.LMS.utils.SecurityUtils;
 import com.example.LMS.utils.annotation.ApiMessage;
 
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
     private final UserService userService;
+    private final CourseService courseService;
     private final PasswordEncoder passwordEncoder;
+    private final AssignmentService assignmentService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService,
+            PasswordEncoder passwordEncoder, CourseService courseService,
+            AssignmentService assignmentService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.assignmentService = assignmentService;
+        this.courseService = courseService;
     }
 
     @PostMapping("/users")
@@ -65,6 +74,28 @@ public class UserController {
     @ApiMessage("Get user with pagination success")
     public ResponseEntity<ResultPaginationDTO> getAllUserMethod(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.getUserWithPagination(pageable));
+    }
+
+    @GetMapping("/users/course")
+    @ApiMessage("Get course by user with pagination success")
+    public ResponseEntity<ResultPaginationDTO> getCourseByUser(Pageable pageable) {
+        String email = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : "";
+        User currentUser = this.userService.getUserByEmail(email);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.courseService.getCourseByUserWithPagination(currentUser.getId(), pageable));
+    }
+
+    @GetMapping("/users/assignment")
+    @ApiMessage("Get assignment by user with pagination success")
+    public ResponseEntity<ResultPaginationDTO> getAssigmnetByUser(Pageable pageable) {
+        String email = SecurityUtils.getCurrentUserLogin().isPresent()
+                ? SecurityUtils.getCurrentUserLogin().get()
+                : "";
+        User currentUser = this.userService.getUserByEmail(email);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.assignmentService.getAssignmentByUserWithPagination(currentUser.getId(), pageable));
     }
 
 }

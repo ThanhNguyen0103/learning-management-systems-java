@@ -63,4 +63,5 @@ public class AssignmentController {
         ResultPaginationDTO res = this.assignmentService.getAssignmentWithPagination(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
+
 }

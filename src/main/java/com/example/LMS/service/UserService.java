@@ -25,4 +25,5 @@ public interface UserService {
     User getUserByEmailAndRefreshToken(String email, String token);
 
     ResultPaginationDTO getUserWithPagination(Pageable pageable);
+
 }

@@ -18,6 +18,8 @@ public interface AssignmentService {
 
     ResultPaginationDTO getAssignmentWithPagination(Pageable pageable);
 
+    ResultPaginationDTO getAssignmentByUserWithPagination(long userId, Pageable pageable);
+
     AssignmentDTO convertAssignmentDTO(Assignment assignment);
 
 }

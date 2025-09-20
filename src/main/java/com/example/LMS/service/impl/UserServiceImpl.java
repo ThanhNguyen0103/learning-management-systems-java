@@ -13,7 +13,9 @@ import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.domain.res.ResUserLoginDTO;
 import com.example.LMS.domain.res.ResUserLoginDTO.UserDTO;
+import com.example.LMS.repository.CourseRepository;
 import com.example.LMS.repository.UserRepository;
+import com.example.LMS.service.CourseService;
 import com.example.LMS.service.UserService;
 import com.example.LMS.utils.constant.RoleEnum;
 import com.example.LMS.utils.error.AlreadyExistsException;
@@ -25,8 +27,10 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserRepository userRepository,
             RoleServiceImpl roleService) {
+
         this.userRepository = userRepository;
         this.roleService = roleService;
+
     }
 
     public User getUserByEmail(String email) {
@@ -118,21 +122,24 @@ public class UserServiceImpl implements UserService {
     public UserDTO convertResUser(User user) {
 
         ResUserLoginDTO.UserDTO res = new ResUserLoginDTO.UserDTO();
+        if (user.getRole() != null) {
+            List<ResUserLoginDTO.PermissionDTO> permissions = user.getRole().getPermissions().stream()
+                    .map(p -> new ResUserLoginDTO.PermissionDTO(
+                            p.getApiPath(),
+                            p.getMethod(),
+                            p.getModule()))
+                    .toList();
 
-        List<ResUserLoginDTO.PermissionDTO> permissions = user.getRole().getPermissions().stream()
-                .map(p -> new ResUserLoginDTO.PermissionDTO(
-                        p.getApiPath(),
-                        p.getMethod(),
-                        p.getModule()))
-                .toList();
+            ResUserLoginDTO.RoleUserDTO roleDTO = new ResUserLoginDTO.RoleUserDTO(user.getRole().getName().name(),
+                    permissions);
+            res.setRole(roleDTO);
+        }
 
-        ResUserLoginDTO.RoleUserDTO roleDTO = new ResUserLoginDTO.RoleUserDTO(user.getRole().getName().name(),
-                permissions);
         res.setEmail(user.getEmail());
         res.setId(user.getId());
         res.setName(user.getName());
         res.setActive(user.isActive());
-        res.setRole(roleDTO);
+
         res.setAge(user.getAge());
         res.setAddress(user.getAddress());
         res.setGender(user.getGender());
@@ -172,4 +179,5 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
 }
