@@ -45,9 +45,11 @@ public class CourseSummaryDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EnrollmentDTO {
+        private long id;
         private Instant enrollDate;
         private String name;
         private boolean status;
+        private long courseId;
 
     }
 }

@@ -135,8 +135,9 @@ public class CourseServiceImpl implements CourseService {
         res.setDescription(course.getDescription());
         if (course.getEnrollments() != null) {
             res.setEnrollments(course.getEnrollments().stream()
-                    .map((item) -> new CourseSummaryDTO.EnrollmentDTO(item.getEnrollDate(), item.getUser().getName(),
-                            item.isStatus()))
+                    .map((item) -> new CourseSummaryDTO.EnrollmentDTO(item.getId(), item.getEnrollDate(),
+                            item.getUser().getName(),
+                            item.isStatus(), course.getId()))
                     .toList());
         }
         return res;

@@ -1,12 +1,14 @@
 package com.example.LMS.service.impl;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.example.LMS.domain.Course;
 import com.example.LMS.domain.Enrollment;
 import com.example.LMS.domain.User;
+import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.EnrollRequestDTO;
 import com.example.LMS.repository.CourseRepository;
 import com.example.LMS.repository.EnrollmentRepository;
@@ -30,7 +32,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public Enrollment create(EnrollRequestDTO enroll) {
         if (this.enrollmentRepository.existsByUserIdAndCourseId(enroll.getUserId(), enroll.getCourseId())) {
-            throw new IllegalArgumentException("User đã đăng kí course này rồi");
+            throw new IllegalArgumentException("bạn đã đăng kí khóa học này rồi");
         }
         User user = this.userRepository.findById(enroll.getUserId())
                 .orElseThrow(() -> new AlreadyExistsException("user không tồn tại"));
@@ -50,6 +52,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .orElseThrow(() -> new AlreadyExistsException("Enrollment không tồn tại"));
 
         this.enrollmentRepository.delete(enrollment);
+    }
+
+    @Override
+    public List<CourseSummaryDTO.EnrollmentDTO> getEnrollByUser(long userId) {
+        return this.enrollmentRepository.findByUserId(userId).stream()
+                .map(item -> new CourseSummaryDTO.EnrollmentDTO(item.getId(), item.getEnrollDate(), null,
+                        item.isStatus(), item.getCourse().getId()))
+                .toList();
     }
 
 }
