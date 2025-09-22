@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.LMS.domain.Course;
+import com.example.LMS.domain.dto.CourseCriteriaDTO;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.service.CourseService;
@@ -53,8 +55,8 @@ public class CourseController {
 
     @GetMapping("/courses")
     @ApiMessage("get courses success")
-    public ResponseEntity<ResultPaginationDTO> getAllCourse(Pageable pageable) {
-        ResultPaginationDTO res = this.courseService.getCourseWithPagination(pageable);
+    public ResponseEntity<ResultPaginationDTO> getAllCourse(Pageable pageable, @ModelAttribute CourseCriteriaDTO req) {
+        ResultPaginationDTO res = this.courseService.getCourseWithPagination(pageable, req);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

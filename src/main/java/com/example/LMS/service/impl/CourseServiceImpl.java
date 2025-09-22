@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.LMS.domain.Course;
 import com.example.LMS.domain.CourseCategory;
 import com.example.LMS.domain.User;
+import com.example.LMS.domain.dto.CourseCriteriaDTO;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 import com.example.LMS.domain.res.ResUserLoginDTO;
@@ -17,6 +19,7 @@ import com.example.LMS.repository.CourseRepository;
 import com.example.LMS.service.CourseService;
 import com.example.LMS.service.UserService;
 import com.example.LMS.utils.error.AlreadyExistsException;
+import com.example.LMS.utils.specification.CourseSpecs;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -97,8 +100,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public ResultPaginationDTO getCourseWithPagination(Pageable pageable) {
-        Page<Course> pages = this.courseRepository.findAll(pageable);
+    public ResultPaginationDTO getCourseWithPagination(Pageable pageable, CourseCriteriaDTO req) {
+
+        Specification<Course> specs = Specification.where(CourseSpecs.hasCategories(req.getCategories()))
+                .or(CourseSpecs.keywordSearch(req.getKeyword()));
+
+        Page<Course> pages = this.courseRepository.findAll(specs, pageable);
         ResultPaginationDTO result = new ResultPaginationDTO();
         ResultPaginationDTO.Meta meta = new ResultPaginationDTO.Meta();
 

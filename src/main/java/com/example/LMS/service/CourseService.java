@@ -3,6 +3,7 @@ package com.example.LMS.service;
 import org.springframework.data.domain.Pageable;
 
 import com.example.LMS.domain.Course;
+import com.example.LMS.domain.dto.CourseCriteriaDTO;
 import com.example.LMS.domain.dto.CourseSummaryDTO;
 import com.example.LMS.domain.dto.ResultPaginationDTO;
 
@@ -17,7 +18,7 @@ public interface CourseService {
 
     CourseSummaryDTO convertCourseSummaryDTO(Course course);
 
-    ResultPaginationDTO getCourseWithPagination(Pageable pageable);
+    ResultPaginationDTO getCourseWithPagination(Pageable pageable, CourseCriteriaDTO req);
 
     ResultPaginationDTO getCourseByUserWithPagination(long userId, Pageable pageable);
 
